@@ -507,7 +507,11 @@ func (m *Merger) makeMergeStruct(values ...reflect.Value) reflect.Value {
 					continue
 				}
 
-				field.Name = canonicalFieldName(field)
+				canonicalName := canonicalFieldName(field)
+				if field.Name != canonicalName {
+					panic(fmt.Sprintf("field name %s != %s", field.Name, canonicalName))
+				}
+				field.Name = canonicalName
 
 				if f, ok := foundFields[field.Name]; ok {
 					if f.Type.Kind() == reflect.Struct && field.Type.Kind() == reflect.Struct {
